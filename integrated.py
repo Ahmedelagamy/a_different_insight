@@ -31,6 +31,12 @@ if uploaded_file is not None:
 else:
     st.stop()
 
+collected_text = st.text_input('Enter your Text for Analysis: ', 'John Doe')
+
+#displaying the entered text
+
+st.write('Your name is ', collected_text)
+
 total_reviews_num = len(data)
 
 
