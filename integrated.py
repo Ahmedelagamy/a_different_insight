@@ -24,18 +24,20 @@ st.title("A Different Storyteller")
 st.sidebar.title('A Different Storyteller')
 
 # Reading reviews
-uploaded_file = st.file_uploader("Choose a file")
-
-if uploaded_file is not None:
-    data = pd.read_excel(uploaded_file)
-else:
-    st.stop()
 
 collected_text = st.text_input('Enter your Text for Analysis: ', 'John Doe')
 
 #displaying the entered text
 
 st.write('Your name is ', collected_text)
+
+
+uploaded_file = st.file_uploader("Choose a file")
+
+if uploaded_file is not None:
+    data = pd.read_excel(uploaded_file)
+else:
+    st.stop()
 
 total_reviews_num = len(data)
 
