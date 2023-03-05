@@ -25,7 +25,7 @@ st.sidebar.title('A Different Storyteller')
 
 # Reading reviews
 
-collected_text = st.text_input('Enter your Text for Analysis: ', 'John Doe')
+collected_text = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
 
 #displaying the entered text
 
