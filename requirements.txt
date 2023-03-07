@@ -14,3 +14,4 @@ jaro-winkler
 networkx
 nltk
 numpy
+bertopic
