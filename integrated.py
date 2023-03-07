@@ -5,6 +5,9 @@ from textblob import TextBlob
 from umap import UMAP
 import re
 import nltk
+from dateutil.relativedelta import relativedelta
+import matplotlib.pyplot as plt
+
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
@@ -17,31 +20,152 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from collections import Counter
 stop_words = set(stopwords.words('english'))
+from bertopic import BERTopic
+# text summarizer imports
+import networkx as nx
+import numpy as np
+import nltk
+import jaro
 
 # Code for project structure
-#st.image('White Piovis Logo.png')
+#st.image('./asset/img/acronym-color.eps')
 st.title("A Different Storyteller")
 st.sidebar.title('A Different Storyteller')
 
+try:
+    from nltk.corpus import stopwords
+except:
+    import nltk
+    nltk.download('stopwords')
+finally:
+    from nltk.corpus import stopwords
+    
+# constants
+sw = list(set(stopwords.words('english')))
+punct = [
+    '!','#','$','%','&','(',')','*',
+    '+',',','-','/',':',';','<','=','>','@',
+    '[','\\',']','^','_','`','{','|','}','~'
+]
 # Reading reviews
 
-collected_text = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
+article = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
 
 #displaying the entered text
 
-st.write('Your name is ', collected_text)
+#st.write('Your article is ', collected_text)
 
+#text_cleaner
+def get_analysis(score):
+    if score < 0:
+        return 'Negative'
+    elif score == 0:
+        return 'Neutral'
+    else:
+        return 'Positive'
+ 
 
-uploaded_file = st.file_uploader("Choose a file")
+def clean_text(text, sw = sw, punct = punct):
+    '''
+    This function will clean the input text by lowering, removing certain punctuations, stopwords and 
+    new line tags.
+    
+    params:
+        text (String) : The body of text you want to clean
+        sw (List) : The list of stopwords you wish to removed from the input text
+        punct (List) : The slist of punctuations you wish to remove from the input text
+        
+    returns:
+        This function will return the input text after it's cleaned (the output will be a string) and 
+        a dictionary mapping of the original sentences with its index
+    '''
+    article = text.lower()
+    
+    # clean punctuations
+    for pun in punct:
+        article = article.replace(pun, '')
+    
+    article = article.replace("[^a-zA-Z]", " ").replace('\r\n', ' ').replace('\n', ' ')
+    original_text_mapping = {k:v for k,v in enumerate(article.split('. '))}
+    
+    article = article.split(' ')
+    
+    # clean stopwords
+    article = [x.lstrip().rstrip() for x in article if x not in sw]
+    article = [x for x in article if x]
+    article = ' '.join(article)
 
-if uploaded_file is not None:
-    data = pd.read_excel(uploaded_file)
-else:
-    st.stop()
+    return original_text_mapping, article
+  
+original_text_mapping, cleaned_book = clean_text(article)
 
-total_reviews_num = len(data)
+# get sentences
+sentences = [x for x in cleaned_book.split('. ') if x not in ['', ' ', '..', '.', '...']]
 
+# similarity matrix
+def create_similarity_matrix(sentences):
+    '''
+    The purpose of this function will be to create an N x N similarity matrix.
+    N represents the number of sentences and the similarity of a pair of sentences
+    will be determined through the Jaro-Winkler Score.
+    
+    params:
+        sentences (List -> String) : This is a list of strings you want to create
+                                     the similarity matrix with.
+     
+    returns:
+        This function will return a square numpy matrix
+    '''
+    
+    # identify sentence similarity matrix with Jaro Winkler score
+    sentence_length = len(sentences)
+    sim_mat = np.zeros((sentence_length, sentence_length))
 
+    for i in range(sentence_length):
+        for j in range(sentence_length):
+            if i != j:
+                similarity = jaro.jaro_winkler_metric(sentences[i], sentences[j])
+                sim_mat[i][j] = similarity
+    return sim_mat
+  
+sim_mat = create_similarity_matrix(sentences)
+
+# create network
+G = nx.from_numpy_matrix(sim_mat)
+
+# calculate page rank scores
+pr_sentence_similarity = nx.pagerank(G)
+
+ranked_sentences = [
+    (original_text_mapping[sent], rank) for sent,rank in sorted(pr_sentence_similarity.items(), key=lambda item: item[1], reverse = True)
+]
+
+# sumamry generation function
+def generate_summary(ranked_sentences, N):
+    '''
+    This function will generate the summary given a list of ranked sentences and the
+    number of sentences the user wants in their summary.
+    
+    params:
+        ranked_sentences (List -> Tuples) : The list of ranked sentences where each
+                                            element is a tuple, the first value in the
+                                            tuple is the sentence, the second value is
+                                            the rank
+        N (Integer) : The number of sentences the user wants in the summary
+        
+    returns:
+        This function will return a string associated to the summarized ranked_sentences
+        of a book
+    '''
+    summary = '. '.join([sent[0] for sent in ranked_sentences[0:N]])
+    return summary
+  
+N = 10
+summary = generate_summary(ranked_sentences, N)
+
+st.write(summary)
+
+# sentiment analysis
 # Making result human friendly
 def get_analysis(score):
     if score < 0:
@@ -51,7 +175,88 @@ def get_analysis(score):
     else:
         return 'Positive'
 
-total_num_reviews= len(data)
+total_num_reviews= len(sentences)
+st.write(total_num_reviews)
+sentiment_score = []
+sentiment_subjectivity=[]
+
+analysis_df=pd.DataFrame()
+analysis_df['sentence']= sentences
+for Sentence in sentences:
+    testimonial = TextBlob(Sentence)
+    sentiment_score.append(testimonial.sentiment.polarity)
+    sentiment_subjectivity.append(testimonial.sentiment.subjectivity)
+
+analysis_df['Sentiment'] = sentiment_score
+analysis_df['Subjectivity'] = sentiment_subjectivity
+
+
+analysis_df['human_sentiment'] = analysis_df['Sentiment'].apply(get_analysis)
+
+
+#Visualiing the distribution of Sentiment
+pos = 0
+neg = 0
+for score in analysis_df['Sentiment']:
+    if score > 0:
+        pos += 1
+    elif score < 0:
+        neg += 1
+
+
+values = [pos, neg]
+label = ['Positive Sentences', 'Negative Sentences']
+
+fig = plt.figure(figsize =(10, 7))
+plt.pie(values, labels = label)
+
+st.pyplot(fig)
+
+st.write(analysis_df.head())
+
+
+#berttopic modeling section
+topic_model = BERTopic()
+
+
+
+st.write(ranked_sentences)
+
+topics, probs = topic_model.fit_transform(sentences*200)
+
+
+st.write(topic_model.visualize_topics())
+
+st.write(topic_model.get_topic_info())
+
+
+"""**Visualizing the sentiment**"""
+
+uploaded_file = st.file_uploader("Choose a file")
+
+
+
+if uploaded_file is not None:
+    data = pd.read_excel(uploaded_file)
+else:
+    st.stop()
+
+
+
+
+uploaded_file = st.file_uploader("Choose a file")
+
+
+
+if uploaded_file is not None:
+    data = pd.read_excel(uploaded_file)
+else:
+    st.stop()
+
+
+total_reviews_num = len(data)
+
+
 
 # Loading Data
 # Applying language detection
@@ -73,8 +278,6 @@ data['detect'] = langdet
 en_df = data[data['detect'] == 'en']
 
 
-from dateutil.relativedelta import relativedelta
-import matplotlib.pyplot as plt
 import contractions
 
 
@@ -140,33 +343,6 @@ en_df.head()
 reviews = en_df['Comment'].tolist()
 sentiment_score = []
 sentiment_subjectivity=[]
-for rev in reviews:
-    testimonial = TextBlob(rev)
-    sentiment_score.append(testimonial.sentiment.polarity)
-    sentiment_subjectivity.append(testimonial.sentiment.subjectivity)
-
-en_df['Sentiment'] = sentiment_score
-en_df['Subjectivity'] = sentiment_subjectivity
-en_df.head()
-
-"""**Visualizing the sentiment**"""
-
-pos = 0
-neg = 0
-for score in en_df['Sentiment']:
-    if score > 0:
-        pos += 1
-    elif score < 0:
-        neg += 1
-
-#Visualiing the distribution of Sentiment
-values = [pos, neg]
-label = ['Positive Reviews', 'Negative Reviews']
-
-fig = plt.figure(figsize =(10, 7))
-plt.pie(values, labels = label)
-
-st.pyplot(fig)
 
 #Number of Negative words in a review
 reviews =en_df['Comment'].tolist()
@@ -306,7 +482,6 @@ import datetime
 today = datetime.date.today ()
 
 
-en_df['human_sentiment'] = en_df['Sentiment'].apply(get_analysis)
 bad_reviews = en_df[en_df['human_sentiment'] == 'Negative']
 good_reviews = en_df[en_df['human_sentiment'] == 'Positive']
 st.header('Select Stop Words')
