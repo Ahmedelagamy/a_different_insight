@@ -53,7 +53,10 @@ button = st.button('weave')
 
 #if button is clicked run code 
 article = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
-
+if len(article)== 0:
+    st.stop
+else:
+    pass
 if button: 
     pass
 #displaying the entered text
