@@ -52,11 +52,13 @@ button = st.button('weave')
 
 
 #if button is clicked run code 
-article = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
-if len(article)== 0:
-    st.stop
+article = st.text_input('Enter your Text for Analysis: ')
+if not article:
+    st.warning('no food for thought.')
+    st.stop()
 else:
-    pass
+    st.success('Thank you for the food for thought.')
+
 if button: 
     pass
 #displaying the entered text
