@@ -48,8 +48,16 @@ punct = [
     '[','\\',']','^','_','`','{','|','}','~'
 ]
 # Reading reviews
+button = st.button('weave')
 
-article = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
+
+#if button is clicked run code 
+if button: 
+    st.write('You entered:',input_text) 
+    output_text = input_text.upper() 
+    st.write('Result:',output_text)
+
+    article = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
     
 #displaying the entered text
 
