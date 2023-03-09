@@ -50,7 +50,7 @@ punct = [
 # Reading reviews
 
 article = st.text_input('Enter your Text for Analysis: ', 'Build the brand story ')
-
+    
 #displaying the entered text
 
 #st.write('Your article is ', collected_text)
@@ -97,7 +97,13 @@ def clean_text(text, sw = sw, punct = punct):
 
     return original_text_mapping, article
   
-original_text_mapping, cleaned_book = clean_text(article)
+
+
+try:
+    original_text_mapping, cleaned_book = clean_text(article)
+
+except:
+    st.write('time to get to work. enter something to analyize')
 
 # get sentences
 sentences = [x for x in cleaned_book.split('. ') if x not in ['', ' ', '..', '.', '...']]
