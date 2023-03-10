@@ -60,6 +60,7 @@ if check_password():
     #st.image('./asset/img/acronym-color.eps')
     st.title("A Different Storyteller")
     st.sidebar.title('A Different Storyteller')
+    article = st.text_input('Enter your Text for Analysis: ')
 
 try:
     from nltk.corpus import stopwords
