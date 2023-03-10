@@ -54,7 +54,7 @@ def check_password():
     else:
         # Password correct.
         return True
-
+article= ''
 if check_password():
 # Code for project structure
     #st.image('./asset/img/acronym-color.eps')
