@@ -62,6 +62,13 @@ if check_password():
     st.sidebar.title('A Different Storyteller')
     article = st.text_input('Enter your Text for Analysis: ',key =123)
 
+
+if not article:
+    st.warning('no food for thought.')
+    st.stop()
+else:
+    st.success('Thank you for the food for thought.')
+
 try:
     from nltk.corpus import stopwords
 except:
@@ -78,14 +85,6 @@ punct = [
     '[','\\',']','^','_','`','{','|','}','~'
 ]
 # Reading reviews
-
-#if button is clicked run code 
-article = st.text_input('Enter your Text for Analysis: ')
-if not article:
-    st.warning('no food for thought.')
-    st.stop()
-else:
-    st.success('Thank you for the food for thought.')
 
 if button: 
     pass
