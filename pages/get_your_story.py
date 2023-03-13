@@ -1,7 +1,7 @@
 import openai
 import streamlit as st
 
-import textract
+
 
 st.title("your writer")
 st.sidebar.title('unleash your brand')
