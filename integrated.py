@@ -86,8 +86,6 @@ punct = [
 ]
 # Reading reviews
 
-if button: 
-    pass
 #displaying the entered text
 
 #st.write('Your article is ', collected_text)
