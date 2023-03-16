@@ -1,5 +1,5 @@
 # imports
-python -m spacy download en_core_web_md
+!python -m spacy download en_core_web_md
 import pandas as pd
 import streamlit as st
 from textblob import TextBlob
