@@ -38,13 +38,14 @@ import utils
 import yaml
 from yaml.loader import SafeLoader
 # Code for  project structure
+
 from spacy import displacy
 #st.image('./asset/img/acronym-color.eps')
 
-st.title("42: The Knower")
+
 st.sidebar.title('A Different Storyteller')
-
-
+st.image('logo.jfif')
+st.title("42: The Knower")
 try:
     from nltk.corpus import stopwords
 except:
@@ -103,9 +104,9 @@ if app_mode == "Home":
     st.header('Highlights')
     # Take the text from the input field and render the entity html.
     # Note that style="ent" indicates entities.
-    ent_html = displacy.render(doc, style='ent', jupyter=False)
+    #ent_html = displacy.render(doc, style='ent', jupyter=False)
     # Display the entity visualization in the browser:
-    st.markdown(ent_html, unsafe_allow_html=True)
+    #st.markdown(ent_html, unsafe_allow_html=True)
     
     key_themes = []
 
@@ -121,7 +122,7 @@ if app_mode == "Home":
     entities = [(entity.text, entity.label_) for entity in doc.ents]
     df = pd.DataFrame(entities, columns=('Entity', 'Label')) 
     st.write(df)
-    st.write(displacy.serve(doc, style="ent"))
+    st.write(displacy.serve(doc, style="ent", port= 8080))
 
 
     # sentiment analysis
