@@ -53,9 +53,15 @@ except:
     nltk.download('stopwords')
 finally:
     from nltk.corpus import stopwords
-
+import subprocess 
 
 # password section
+@st.cache_resource
+
+def download_en_core_web_sm():
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+stop_words = set(stopwords.words('english'))
+
 #hashed_passwords = stauth.Hasher(['abc', 'def']).generate() 
 #Create login widget
 nlp = spacy.load('en_core_web_md')
