@@ -2,6 +2,7 @@ import openai
 import streamlit as st
 
 
+st.image('./logo.jfif')
 st.title("42: The Story Teller")
 st.sidebar.title('Tell Your Side')
 # Preprepared pipeline
@@ -9,6 +10,7 @@ st.sidebar.title('Tell Your Side')
 with st.form("my_form"):
         name_option = st.text_input("What is the name of your company")
         industry = st.text_input("Enter the field of the industry")
+        competitive_edge = st.text_input("what stands out about your company")
         submitted = st.form_submit_button("Submit")
 
 
@@ -29,7 +31,7 @@ else:
 openai.api_key ='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'
 
 
-prompt ='write a {} for a company named.{} that works in {}: '.format(demand, name_option , industry)
+prompt ='write a {} for a company named.{} that works in {} and focuses on the company\'s strengths that include {}: '.format(demand, name_option , industry, competitive_edge)
 
 # Text engine
 response = openai.Completion.create(model="text-davinci-003", prompt=prompt, temperature=.7, max_tokens=1000)

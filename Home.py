@@ -122,7 +122,8 @@ if app_mode == "Home":
     entities = [(entity.text, entity.label_) for entity in doc.ents]
     df = pd.DataFrame(entities, columns=('Entity', 'Label')) 
     st.write(df)
-    st.write(displacy.serve(doc, style="ent", port= 8080))
+    
+    #st.write(displacy.serve(doc, style="ent", port= 8080))
 
 
     # sentiment analysis
@@ -347,7 +348,7 @@ for rev in reviews:
         if score < 0:
             neg += 1
     negative_count.append(neg)
-
+ 
 en_df['Neg_Count'] = negative_count
 
 #Word Count
