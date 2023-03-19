@@ -37,6 +37,6 @@ prompt ='write a {} for a company named.{} that works in {} and focuses on the c
 response = openai.Completion.create(model="text-davinci-003", prompt=prompt, temperature=.7, max_tokens=1000)
 # Text engine
 # Allow the user to enter a prefix
-st.header("""Brand Generator""")
+st.header("""Smart Business Consultation""")
 
 st.write(response.choices[0].text)
