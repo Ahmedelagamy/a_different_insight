@@ -28,7 +28,7 @@ else:
 
 
 # Set your OpenAI API key
-openai.api_key ='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'
+openai.api_key = st.secrets['AI_KEY']
 
 
 prompt ='write a {} for a company named.{} that works in {} and focuses on the company\'s strengths that include {}: '.format(demand, name_option , industry, competitive_edge)
