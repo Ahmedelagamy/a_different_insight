@@ -58,7 +58,7 @@ import subprocess
 # password section
 @st.experimental_memo
 
-def download_en_core_web_sm():
+def download_en_core_web_md():
     subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
 stop_words = set(stopwords.words('english'))
 
