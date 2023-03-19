@@ -85,35 +85,22 @@ bad_reviews_data = clean_text(bad_reviews, 'Comment')
 good_reviews_data= clean_text(good_reviews, 'Comment')
 # ngram
 from sklearn.feature_extraction.text import TfidfVectorizer
-c_vec = TfidfVectorizer(analyzer= 'word' ,stop_words= custom_stopwords, ngram_range=(2,4))
+c_vec = TfidfVectorizer(analyzer= 'word' ,stop_words= stop_words, ngram_range=(2,3))
 # matrix of ngrams
 ngrams = c_vec.fit_transform(good_reviews_data)
 # count frequency of ngrams
 count_values = ngrams.toarray().sum(axis=0)
 # list of ngrams
 vocab = c_vec.vocabulary_
-df_pros = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
-                       ).rename(columns={0: 'frequency', 1:'Pros'})
-
-df_pros['percentage'] = df_pros['frequency'].apply(lambda x: (x / df_pros['frequency'].sum()*100))
-st.write('Top pros')
-st.write(df_pros)
-df_pros =df_pros.to_csv(index=False).encode('utf-8')
-st.download_button(
-    label="Download pros",
-    data=df_pros,
-    mime='text/csv',
-    file_name='pros_analysis.csv')
-
-
 ngrams_cons = c_vec.fit_transform(bad_reviews_data)
-
 # count frequency of ngrams
 count_values = ngrams_cons.toarray().sum(axis=0)
 
 # list of ngrams
 vocab_cons = c_vec.vocabulary_
-df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)).rename(columns={0: 'frequency', 1:'Cons'})
+
+# Create new dataframe from scratch
+"""df_ngram_cons = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab_cons.items()], reverse=True)).rename(columns={0: 'frequency', 1:'Cons'})
 df_ngram_cons['percentage'] = df_ngram_cons['frequency'].apply(lambda x: (x / df_ngram_cons['frequency'].sum()))
 st.write('Top cons')
 
@@ -126,3 +113,4 @@ st.download_button(
     mime='text/csv',
     file_name='cons.csv')
 
+"""
