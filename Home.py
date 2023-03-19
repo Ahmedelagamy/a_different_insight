@@ -56,7 +56,7 @@ finally:
 import subprocess 
 
 # password section
-@st.cache_resource
+@st.experimental_memo
 
 def download_en_core_web_sm():
     subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
