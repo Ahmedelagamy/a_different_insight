@@ -161,7 +161,7 @@ st.pyplot(fig)
 st.write(analysis_df)
 
 from sklearn.feature_extraction.text import TfidfVectorizer
-c_vec = TfidfVectorizer(analyzer= 'word' , ngram_range=(1,2))
+c_vec = TfidfVectorizer(analyzer= 'word' , ngram_range=(2,3))
 # matrix of ngrams 
 ngrams = c_vec.fit_transform(sentences)
 # count frequency of ngrams
