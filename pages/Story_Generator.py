@@ -3,14 +3,14 @@ import streamlit as st
 
 
 st.image('./logo.jfif')
-st.title("42: The Story Teller")
+st.title("42: The StoryTeller")
 st.sidebar.title('Tell Your Side')
 # Preprepared pipeline
 # generation specific form
 with st.form("my_form"):
-        name_option = st.text_input("What is the name of your company")
-        industry = st.text_input("Enter the field of the industry")
-        competitive_edge = st.text_input("what stands out about your company")
+        name_option = st.text_input("What is the name of your company?")
+        industry = st.text_input("Enter the field of the industry?")
+        competitive_edge = st.text_input("what stands out about your company?")
         submitted = st.form_submit_button("Submit")
 
 
@@ -37,6 +37,6 @@ prompt ='write a {} for a company named.{} that works in {} and focuses on the c
 response = openai.Completion.create(model="text-davinci-003", prompt=prompt, temperature=.5, max_tokens=1000)
 # Text engine
 # Allow the user to enter a prefix
-st.header("""Smart Business Consultation""")
+st.header("""your 42 Consultation is:""")
 
 st.write(response.choices[0].text)
