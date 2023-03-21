@@ -188,11 +188,15 @@ representation_model = PartOfSpeech("en_core_web_md")
 # Use the representation model in BERTopic on top of the default pipeline
 topic_model = BERTopic(representation_model=representation_model)
 topics, probs = topic_model.fit_transform(sentences*200)
-
-
+topic_labels = topic_model.generate_topic_labels(nr_words=3,
+                                                 topic_prefix=False,
+                                                 word_length=10,
+                                                 separator=", ")
+topic_model.set_topic_labels(topic_labels)
 st.write(topic_model.visualize_topics())
 
 st.write(topic_model.get_topic_info())
+
 
     #options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
 ###if selection == 'Tab 1': st.subheader('Tab 1') st.write('You have selected Tab 1') elif selection == 'Tab 2': st.subheader('Tab 2') st.write('You have selected Tab 2')
