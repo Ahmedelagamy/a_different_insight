@@ -179,8 +179,11 @@ st.header("What is this text about")
 
 #ktrain.text.get_topic_model(sentences, n_topics=20, n_features=1000, min_df=2, max_df=0.95)
 #ktrain
-topic_model = BERTopic()
 
+representation_model = KeyBERTInspired()
+
+# Use the representation model in BERTopic on top of the default pipeline
+topic_model = BERTopic(representation_model=representation_model)
 
 topics, probs = topic_model.fit_transform(sentences*200)
 
