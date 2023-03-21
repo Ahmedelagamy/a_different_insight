@@ -56,6 +56,7 @@ except:
 finally:
     from nltk.corpus import stopwords
 
+nlp = spacy.load('en_core_web_md')
 
 # password section
 #hashed_passwords = stauth.Hasher(['abc', 'def']).generate() 
