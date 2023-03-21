@@ -221,9 +221,12 @@ st.write(topic_model.get_topic_info())
 
 
 doc= nlp(str(sentences))
-entities = [(entity.text, entity.label_) for entity in doc.ents]
-df = pd.DataFrame(entities, columns=('Entity', 'Label')) 
-st.write(df)
+ner_df = pd.DataFrame(columns=["Text", "Entity", "Label"])
+for ent in doc.ents:
+  ner_df = ner_df.append({"Text": ent.text, "Entity": ent.start_char, "Label": ent.label_}, ignore_index=True)
+
+
+st.write(ner_df)
 
 
 uploaded_file = st.file_uploader("Choose a file")
