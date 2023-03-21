@@ -55,15 +55,9 @@ except:
     nltk.download('stopwords')
 finally:
     from nltk.corpus import stopwords
-import subprocess 
+
 
 # password section
-@st.experimental_memo
-
-def download_en_core_web_md():
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-stop_words = set(stopwords.words('english'))
-
 #hashed_passwords = stauth.Hasher(['abc', 'def']).generate() 
 #Create login widget
 nlp = spacy.load('en_core_web_sm')
@@ -177,8 +171,6 @@ count_values = ngrams.toarray().sum(axis=0)
 vocab = c_vec.vocabulary_
 
 st.write(vocab)
-# list of ngrams
-vocab_cons = c_vec.vocabulary_
 
 # Create new dataframe from scratch
  
