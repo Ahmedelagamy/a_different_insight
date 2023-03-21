@@ -219,7 +219,7 @@ st.write(topic_model.get_topic_info())
 #openAIAnswer = openAIAnswerUnformatted
 #st.write(openAIAnswer)
 
-
+st.header('Important Entities in text')
 doc= nlp(str(sentences))
 ner_df = pd.DataFrame(columns=["Text", "Entity", "Label"])
 for ent in doc.ents:
