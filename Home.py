@@ -224,7 +224,7 @@ ner_df = pd.DataFrame(columns=["Text", "Entity", "Label"])
 for ent in doc.ents:
   ner_df = ner_df.append({"Text": ent.text, "Entity": ent.start_char, "Label": ent.label_}, ignore_index=True)
 
-st.header('people and Organization in text')
+st.header('People and Organization in text')
 st.write(ner_df)
 
     #options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
