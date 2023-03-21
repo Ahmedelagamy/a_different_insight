@@ -220,7 +220,7 @@ st.write(topic_model.get_topic_info())
 #st.write(openAIAnswer)
 
 
-doc= nlp(sentences)
+doc= nlp(str(sentences))
 entities = [(entity.text, entity.label_) for entity in doc.ents]
 df = pd.DataFrame(entities, columns=('Entity', 'Label')) 
 st.write(df)
