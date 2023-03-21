@@ -159,6 +159,7 @@ plt.pie(values, labels = label)
 
 st.pyplot(fig)
 
+st.header('How do people feel about?')
 st.write(analysis_df)
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -171,6 +172,7 @@ count_values = ngrams.toarray().sum(axis=0)
 vocab = c_vec.vocabulary_
 ngram_df = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
                        ).rename(columns={0: 'frequency', 1:'Pros'})
+st.header('What are the most talked about things?')
 st.write(ngram_df[:20])
 
 
@@ -194,13 +196,11 @@ topic_labels = topic_model.generate_topic_labels(nr_words=3,
                                                  word_length=10,
                                                  separator=", ")
 topic_model.set_topic_labels(topic_labels)
+st.header('visualizing Words and Topics')
 st.write(topic_model.visualize_topics())
 
 st.write(topic_model.get_topic_info())
 
-
-    #options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
-###if selection == 'Tab 1': st.subheader('Tab 1') st.write('You have selected Tab 1') elif selection == 'Tab 2': st.subheader('Tab 2') st.write('You have selected Tab 2')
 
 #Create a sidebar with different options 
 # Reading reviews
@@ -225,8 +225,11 @@ ner_df = pd.DataFrame(columns=["Text", "Entity", "Label"])
 for ent in doc.ents:
   ner_df = ner_df.append({"Text": ent.text, "Entity": ent.start_char, "Label": ent.label_}, ignore_index=True)
 
-
+st.header('people and Organization in text')
 st.write(ner_df)
+
+    #options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
+###if selection == 'Tab 1': st.subheader('Tab 1') st.write('You have selected Tab 1') elif selection == 'Tab 2': st.subheader('Tab 2') st.write('You have selected Tab 2')
 
 
 uploaded_file = st.file_uploader("Choose a file")
