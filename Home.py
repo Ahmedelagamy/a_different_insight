@@ -57,6 +57,11 @@ finally:
     from nltk.corpus import stopwords
 
 
+# password section
+#hashed_passwords = stauth.Hasher(['abc', 'def']).generate() 
+#Create login widget
+nlp = spacy.load('en_core_web_sm')
+#app structure
 app_mode = st.sidebar.selectbox("Choose the display mode", ["Home", "Entity Anlysis", "Topic Analysis"])
 # text window
 article = st.text_area('Enter your Text for Analysis: ', 'What do you want analyzed')
@@ -167,6 +172,18 @@ vocab = c_vec.vocabulary_
 
 st.write(vocab)
 
+st.header("What is this text about")
+
+from ktrain.text.summarization import TransformerSummarizer
+ts = TransformerSummarizer()
+ts.summarize(sentences)
+
+
+#ktrain.text.get_topic_model(sentences, n_topics=20, n_features=1000, min_df=2, max_df=0.95)
+#ktrain
+from ktrain.text.kw import KeywordExtractor
+kwe = KeywordExtractor()
+kwe.extract_keywords(sentences, candidate_generator='noun_phrases')
 # Create new dataframe from scratch
  
 #options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
@@ -199,7 +216,7 @@ uploaded_file = st.file_uploader("Choose a file")
 
 
 if uploaded_file is not None:
-    data = pd.read_excel(uploaded_file)
+    data = pd.read_csv(uploaded_file)
 else:
     st.stop()
 
@@ -208,90 +225,3 @@ else:
 
 text_col = data['TEXT'].astype(str)
 
-# Language detection
-langdet = []
-for i in range(len(data)):
-    try:
-        lang=detect(text_col[i])
-    except:
-        lang='no'
-
-    langdet.append(lang)
-
-data['detect'] = langdet
-# Select language module
-en_df = data[data['detect'] == 'en']
-
-
-import contractions
-
-
-# Sentiment Analysis
-from textblob import TextBlob
-
-#POS Tagging
-import nltk
-nltk.download("popular")
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize, sent_tokenize
-from collections import Counter
-stop_words = set(stopwords.words('english'))
-import re
-
-
-
-
-reviews = en_df['TEXT'].tolist()
-sentiment_score = []
-sentiment_subjectivity=[]
-
-#Number of Negative words in a review
-reviews =en_df['Comment'].tolist()
-negative_count = []
-for rev in reviews:
-    words = rev.split()
-    neg = 0
-    for w in words:
-        testimonial = TextBlob(w)
-        score = testimonial.sentiment.polarity
-        if score < 0:
-            neg += 1
-    negative_count.append(neg)
- 
-en_df['Neg_Count'] = negative_count
-
-#Word Count
-en_df['Word_Count'] = en_df['Comment'].str.split().str.len()
-
-
-reviews = en_df['Comment'].str.lower().str.split()
-
-# Get amount of unique words
-en_df['Unique_words'] = reviews.apply(set).apply(len)
-en_df['Unique_words'] = en_df[['Unique_words']].div(en_df.Word_Count, axis=0)
-review_text = en_df['Comment']
-import datetime
-today = datetime.date.today ()
-
-
-bad_reviews = en_df[en_df['human_sentiment'] == 'Negative']
-good_reviews = en_df[en_df['human_sentiment'] == 'Positive']
-st.header('Select Stop Words')
-
-custom_stopwords = st.text_input('Enter Stopword')
-custom_stopwords = custom_stopwords.split()
-nltk_Stop= stopwords.words("english")
-final_stop_words = nltk_Stop + custom_stopwords
-
-
-# Create DataFrame
-df_1 = pd.DataFrame(data)
-st.write(df_1)
-df_1 =df_1.to_csv(index=False).encode('utf-8')
-st.download_button(
-    label="Download Analysis",
-    data=df_1,
-    mime='text/csv',
-    file_name='analysis.csv')
-
-#text cleaning function
