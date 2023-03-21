@@ -168,8 +168,10 @@ ngrams = c_vec.fit_transform(sentences)
 count_values = ngrams.toarray().sum(axis=0)
 # list of ngrams
 vocab = c_vec.vocabulary_
+ngram_df = pd.DataFrame(sorted([(count_values[i],k) for k,i in vocab.items()], reverse=True)
+                       ).rename(columns={0: 'frequency', 1:'Pros'})
+st.write(ngram_df[:20])
 
-st.write(vocab)
 
 st.header("What is this text about")
 
