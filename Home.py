@@ -60,7 +60,6 @@ finally:
 # password section
 #hashed_passwords = stauth.Hasher(['abc', 'def']).generate() 
 #Create login widget
-nlp = spacy.load('en_core_web_sm')
 #app structure
 app_mode = st.sidebar.selectbox("Choose the display mode", ["Home", "Entity Anlysis", "Topic Analysis"])
 # text window
@@ -99,7 +98,7 @@ summary = utils.generate_summary(ranked_sentences, N)
 st.header('Highlights')
 
 st.write(summary)
-doc = nlp(summary)
+
  #   dependency parser
  #   dep_svg = displacy.render(doc, style='dep', jupyter=False)
  #   st.image(dep_svg, width=400, use_column_width='never')
