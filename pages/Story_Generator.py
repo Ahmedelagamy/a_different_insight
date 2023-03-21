@@ -34,7 +34,7 @@ openai.api_key = st.secrets['AI_KEY']
 prompt ='write a {} for a company named.{} that works in {} and focuses on the company\'s strengths that include {}: '.format(demand, name_option , industry, competitive_edge)
 
 # Text engine
-response = openai.Completion.create(model="text-davinci-003", prompt=prompt, temperature=.7, max_tokens=1000)
+response = openai.Completion.create(model="text-davinci-003", prompt=prompt, temperature=.5, max_tokens=1000)
 # Text engine
 # Allow the user to enter a prefix
 st.header("""Smart Business Consultation""")
