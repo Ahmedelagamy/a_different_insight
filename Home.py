@@ -173,16 +173,13 @@ st.write(vocab)
 
 st.header("What is this text about")
 
-from ktrain.text.summarization import TransformerSummarizer
-ts = TransformerSummarizer()
-ts.summarize(sentences)
 
 
 #ktrain.text.get_topic_model(sentences, n_topics=20, n_features=1000, min_df=2, max_df=0.95)
 #ktrain
 from ktrain.text.kw import KeywordExtractor
 kwe = KeywordExtractor()
-kwe.extract_keywords(sentences, candidate_generator='noun_phrases')
+st.write(kwe.extract_keywords(sentences, candidate_generator='noun_phrases'))
 # Create new dataframe from scratch
  
 #options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
