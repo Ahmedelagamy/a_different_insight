@@ -219,8 +219,10 @@ st.write(topic_model.get_topic_info())
 #st.write(openAIAnswer)
 
 
-
-
+doc= nlp(sentences)
+entities = [(entity.text, entity.label_) for entity in doc.ents]
+df = pd.DataFrame(entities, columns=('Entity', 'Label')) 
+st.write(df)
 
 
 uploaded_file = st.file_uploader("Choose a file")
