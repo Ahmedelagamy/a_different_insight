@@ -57,11 +57,6 @@ finally:
     from nltk.corpus import stopwords
 
 
-# password section
-#hashed_passwords = stauth.Hasher(['abc', 'def']).generate() 
-#Create login widget
-nlp = spacy.load('en_core_web_sm')
-#app structure
 app_mode = st.sidebar.selectbox("Choose the display mode", ["Home", "Entity Anlysis", "Topic Analysis"])
 # text window
 article = st.text_area('Enter your Text for Analysis: ', 'What do you want analyzed')
