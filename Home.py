@@ -177,12 +177,17 @@ st.header("What is this text about")
 
 #ktrain.text.get_topic_model(sentences, n_topics=20, n_features=1000, min_df=2, max_df=0.95)
 #ktrain
-from ktrain.text.kw import KeywordExtractor
-kwe = KeywordExtractor()
-st.write(kwe.extract_keywords(sentences, candidate_generator='noun_phrases'))
-# Create new dataframe from scratch
- 
-#options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
+topic_model = BERTopic()
+
+
+topics, probs = topic_model.fit_transform(sentences*200)
+
+
+st.write(topic_model.visualize_topics())
+
+st.write(topic_model.get_topic_info())
+
+    #options = ['Tab 1', 'Tab 2'] selection = st.sidebar.selectbox('Select an option', options)
 ###if selection == 'Tab 1': st.subheader('Tab 1') st.write('You have selected Tab 1') elif selection == 'Tab 2': st.subheader('Tab 2') st.write('You have selected Tab 2')
 
 #Create a sidebar with different options 
