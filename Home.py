@@ -176,7 +176,7 @@ st.header('What are the most talked about things?')
 st.write(ngram_df[:20])
 
 
-st.header("What is this text about")
+st.write("What is this text about")
 
 
 
